@@ -1,10 +1,12 @@
 import React, { useState, useCallback } from 'react';
 import EasyCropper from 'react-easy-crop';
-import { Upload, Download, Crop, ArrowLeft, RefreshCw, Scissors } from 'lucide-react';
+import { Upload, Download, ArrowLeft, RefreshCw, Scissors } from 'lucide-react';
 import { cn } from '@/src/lib/utils';
+import { translations, Language } from '../../translations';
 
 interface CropperProps {
   onBack: () => void;
+  lang: Language;
 }
 
 const ASPECT_RATIOS = [
@@ -15,7 +17,8 @@ const ASPECT_RATIOS = [
   { label: 'Unchecked', value: undefined },
 ];
 
-export default function Cropper({ onBack }: CropperProps) {
+export default function Cropper({ onBack, lang }: CropperProps) {
+  const t = translations[lang];
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [crop, setCrop] = useState({ x: 0, y: 0 });
@@ -97,11 +100,11 @@ export default function Cropper({ onBack }: CropperProps) {
     <div className="space-y-8">
       <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between border-b border-gray-100 pb-6">
         <div>
-          <h2 className="text-2xl font-bold tracking-tight text-gray-900">Image Cropper</h2>
-          <p className="text-[10px] font-bold uppercase tracking-widest text-rose-600">Visual Extraction</p>
+          <h2 className="text-2xl font-bold tracking-tight text-gray-900">{t.crop}</h2>
+          <p className="text-[10px] font-bold uppercase tracking-widest text-rose-600">{t.localProcessing}</p>
         </div>
         <button onClick={onBack} className="text-[10px] font-bold uppercase tracking-widest text-gray-400 hover:text-rose-600 transition-colors flex items-center gap-2 group">
-          <ArrowLeft size={14} className="group-hover:-translate-x-1 transition-transform" /> Exit to Dashboard
+          <ArrowLeft size={14} className="group-hover:-translate-x-1 transition-transform" /> {t.back}
         </button>
       </div>
 
@@ -110,7 +113,7 @@ export default function Cropper({ onBack }: CropperProps) {
         <div className="lg:col-span-4 space-y-6">
           <div className="bg-white border border-gray-200 p-6 rounded-2xl space-y-8 shadow-sm">
             <div className="space-y-4">
-              <label className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Aspect Ratio</label>
+              <label className="text-[10px] font-bold uppercase tracking-widest text-gray-400">{t.aspectRatio}</label>
               <div className="grid grid-cols-2 gap-2">
                 {ASPECT_RATIOS.map((ratio) => (
                   <button
@@ -131,7 +134,7 @@ export default function Cropper({ onBack }: CropperProps) {
 
             <div className="space-y-4">
               <div className="flex justify-between items-baseline text-[10px] font-bold uppercase tracking-widest text-gray-400">
-                <label>Zoom Level</label>
+                <label>{t.zoom}</label>
                 <span className="text-gray-900">{zoom.toFixed(1)}x</span>
               </div>
               <input 
@@ -152,7 +155,7 @@ export default function Cropper({ onBack }: CropperProps) {
                 className="w-full py-3.5 bg-rose-600 disabled:bg-gray-100 disabled:text-gray-400 text-white rounded-xl font-bold uppercase tracking-widest text-xs transition-all flex items-center justify-center gap-2 hover:bg-rose-700 shadow-lg shadow-rose-100"
               >
                 {isCropping ? <RefreshCw className="animate-spin" size={14} /> : <Scissors size={14} />}
-                {isCropping ? 'Cropping' : 'Extract & Save'}
+                {isCropping ? '...' : t.export}
               </button>
             </div>
           </div>
@@ -191,11 +194,11 @@ export default function Cropper({ onBack }: CropperProps) {
                   <Upload size={24} className="text-rose-500 opacity-40 group-hover:opacity-100 transition-all" />
                 </div>
                 <div className="space-y-2">
-                  <h4 className="text-sm font-bold text-white/40 uppercase tracking-widest">Awaiting Frame</h4>
+                  <h4 className="text-sm font-bold text-white/40 uppercase tracking-widest">{t.selectImage}</h4>
                   <p className="text-white/20 text-[10px] font-medium max-w-xs mx-auto uppercase tracking-wide">Select an image to activate the crop window</p>
                 </div>
                 <label className="mt-6 cursor-pointer px-6 py-2 bg-rose-600 rounded-full text-[10px] font-bold uppercase tracking-widest text-white hover:bg-rose-700 transition-all shadow-lg shadow-rose-900/40">
-                  Load Image
+                  {t.selectImage}
                   <input type="file" accept="image/*" onChange={handleFileChange} className="hidden" />
                 </label>
               </div>

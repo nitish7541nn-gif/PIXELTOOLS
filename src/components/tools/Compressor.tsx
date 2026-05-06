@@ -1,13 +1,16 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState } from 'react';
 import imageCompression from 'browser-image-compression';
-import { Upload, Download, Loader2, Image as ImageIcon, ArrowLeft, CheckCircle2, Zap, ArrowRight } from 'lucide-react';
+import { Upload, Download, Loader2, ArrowLeft, Zap } from 'lucide-react';
 import { cn } from '@/src/lib/utils';
+import { translations, Language } from '../../translations';
 
 interface CompressorProps {
   onBack: () => void;
+  lang: Language;
 }
 
-export default function Compressor({ onBack }: CompressorProps) {
+export default function Compressor({ onBack, lang }: CompressorProps) {
+  const t = translations[lang];
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [compressedFile, setCompressedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
@@ -68,11 +71,11 @@ export default function Compressor({ onBack }: CompressorProps) {
     <div className="space-y-8">
       <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between border-b border-gray-100 pb-6">
         <div>
-          <h2 className="text-2xl font-bold tracking-tight text-gray-900">Image Compressor</h2>
-          <p className="text-[10px] font-bold uppercase tracking-widest text-blue-600">Optimization Module</p>
+          <h2 className="text-2xl font-bold tracking-tight text-gray-900">{t.compress}</h2>
+          <p className="text-[10px] font-bold uppercase tracking-widest text-blue-600">{t.localProcessing}</p>
         </div>
         <button onClick={onBack} className="text-[10px] font-bold uppercase tracking-widest text-gray-400 hover:text-blue-600 transition-colors flex items-center gap-2 group">
-          <ArrowLeft size={14} className="group-hover:-translate-x-1 transition-transform" /> Exit to Dashboard
+          <ArrowLeft size={14} className="group-hover:-translate-x-1 transition-transform" /> {t.back}
         </button>
       </div>
 
@@ -82,7 +85,7 @@ export default function Compressor({ onBack }: CompressorProps) {
           <div className="bg-white border border-gray-200 p-6 rounded-2xl space-y-6 shadow-sm">
             <div className="space-y-4">
               <div className="flex justify-between items-baseline">
-                <label className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Quality</label>
+                <label className="text-[10px] font-bold uppercase tracking-widest text-gray-400">{t.quality}</label>
                 <span className="text-sm font-bold text-gray-900">{Math.round(quality * 100)}%</span>
               </div>
               <input 
@@ -97,7 +100,7 @@ export default function Compressor({ onBack }: CompressorProps) {
             </div>
 
             <div className="space-y-2">
-              <label className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Refine Size</label>
+              <label className="text-[10px] font-bold uppercase tracking-widest text-gray-400">{t.settings}</label>
               <select 
                 value={maxWidth}
                 onChange={(e) => setMaxWidth(parseInt(e.target.value))}
@@ -117,7 +120,7 @@ export default function Compressor({ onBack }: CompressorProps) {
                 className="w-full py-3.5 bg-blue-600 disabled:bg-gray-100 disabled:text-gray-400 text-white rounded-xl font-bold uppercase tracking-widest text-xs transition-all flex items-center justify-center gap-2 hover:bg-blue-700 shadow-lg shadow-blue-100"
               >
                 {isCompressing ? <Loader2 className="animate-spin" size={14} /> : <Zap size={14} />}
-                {isCompressing ? 'Processing' : 'Optimize Now'}
+                {isCompressing ? '...' : t.optimizeNow}
               </button>
 
               {compressedUrl && (
@@ -125,7 +128,7 @@ export default function Compressor({ onBack }: CompressorProps) {
                   onClick={download}
                   className="w-full py-3.5 bg-gray-900 text-white rounded-xl font-bold uppercase tracking-widest text-xs transition-all flex items-center justify-center gap-2 hover:bg-black"
                 >
-                  <Download size={14} /> Save Image
+                  <Download size={14} /> {t.export}
                 </button>
               )}
             </div>
@@ -185,11 +188,11 @@ export default function Compressor({ onBack }: CompressorProps) {
                   <Upload size={32} />
                 </div>
                 <div className="space-y-1">
-                  <h4 className="text-sm font-bold text-gray-900">Select Image</h4>
+                  <h4 className="text-sm font-bold text-gray-900">{t.selectImage}</h4>
                   <p className="text-xs text-gray-400">Drag & drop or browse your local files</p>
                 </div>
                 <label className="inline-block cursor-pointer px-6 py-2 bg-white border border-gray-200 rounded-full text-[10px] font-bold uppercase tracking-widest text-gray-900 hover:border-blue-600 hover:text-blue-600 transition-all">
-                  Choose File
+                  {t.selectImage}
                   <input type="file" accept="image/*" onChange={handleFileChange} className="hidden" />
                 </label>
               </div>
