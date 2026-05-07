@@ -1,20 +1,41 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# Pixel Tools
 
-# Run and deploy your AI Studio app
+A professional-grade, 100% browser-based suite of image utilities including Compression, Resizing, and Cropping.
 
-This contains everything you need to run your app locally.
+## Features
+- **Image Compression**: Reduce file size without losing quality.
+- **Image Resizer**: Batch scale images to specific dimensions or presets.
+- **Image Cropper**: Precise framing and extraction for any aspect ratio.
+- **Privacy First**: All processing happens locally in your browser. No images are ever uploaded to a server.
 
-View your app in AI Studio: https://ai.studio/apps/a80a7a4a-0ef8-41a7-bba0-6b25ba0cddc1
+## Deployment to Netlify
 
-## Run Locally
+1. **GitHub Upload**:
+   - Create a new repository on GitHub.
+   - Run the following commands in your local project folder:
+     ```bash
+     git init
+     git add .
+     git commit -m "Initial commit"
+     git branch -M main
+     git remote add origin YOUR_GITHUB_REPO_URL
+     git push -u origin main
+     ```
 
-**Prerequisites:**  Node.js
+2. **Netlify Setup**:
+   - Go to [Netlify](https://www.netlify.com/) and log in.
+   - Click **"Add new site"** -> **"Import from GitHub"**.
+   - Select your `Pixel Tools` repository.
+   - Configure the build settings:
+     - **Build command**: `npm run build`
+     - **Publish directory**: `dist`
+   - Click **"Deploy site"**.
 
-
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+## Technology Stack
+- **React 19** + **TypeScript**
+- **Vite** (Build Tool)
+- **Tailwind CSS** (Styling)
+- **Motion** (Animations)
+- **Lucide React** (Icons)
+- **Browser Image Compression**
+- **React Easy Crop**

@@ -1,11 +1,9 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Upload, Download, Maximize2, ArrowLeft, RefreshCw, Lock, Unlock, Grid3X3, Smartphone, Laptop } from 'lucide-react';
 import { cn } from '@/src/lib/utils';
-import { translations, Language } from '../../translations';
 
 interface ResizerProps {
   onBack: () => void;
-  lang: Language;
 }
 
 const PRESETS = [
@@ -15,8 +13,7 @@ const PRESETS = [
   { name: 'HD', width: 1920, height: 1080, icon: Maximize2 },
 ];
 
-export default function Resizer({ onBack, lang }: ResizerProps) {
-  const t = translations[lang];
+export default function Resizer({ onBack }: ResizerProps) {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [originalDimensions, setOriginalDimensions] = useState({ width: 0, height: 0 });
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
@@ -90,20 +87,39 @@ export default function Resizer({ onBack, lang }: ResizerProps) {
     <div className="space-y-8">
       <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between border-b border-gray-100 pb-6">
         <div>
-          <h2 className="text-2xl font-bold tracking-tight text-gray-900">{t.resize}</h2>
-          <p className="text-[10px] font-bold uppercase tracking-widest text-indigo-600">{t.localProcessing}</p>
+          <h2 className="text-2xl font-bold tracking-tight text-gray-900">Image Resizer</h2>
+          <p className="text-[10px] font-bold uppercase tracking-widest text-indigo-600">Scaling Module</p>
         </div>
         <button onClick={onBack} className="text-[10px] font-bold uppercase tracking-widest text-gray-400 hover:text-indigo-600 transition-colors flex items-center gap-2 group">
-          <ArrowLeft size={14} className="group-hover:-translate-x-1 transition-transform" /> {t.back}
+          <ArrowLeft size={14} className="group-hover:-translate-x-1 transition-transform" /> Exit to Dashboard
         </button>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         {/* Settings Bar */}
         <div className="lg:col-span-4 space-y-6">
+          <div className="space-y-3">
+            <h3 className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Quick Presets</h3>
+            <div className="grid grid-cols-2 gap-2">
+               {PRESETS.map((preset) => (
+                 <button
+                   key={preset.name}
+                   onClick={() => applyPreset(preset.width, preset.height)}
+                   className="flex items-center gap-2 p-3 bg-white hover:bg-indigo-50 border border-gray-100 rounded-xl transition-all group"
+                 >
+                   <preset.icon size={14} className="text-indigo-400 group-hover:text-indigo-600" />
+                   <div className="text-left leading-none">
+                     <p className="text-[9px] font-bold uppercase tracking-tight text-gray-900">{preset.name}</p>
+                     <p className="text-[8px] font-mono text-gray-400">{preset.width}×{preset.height}</p>
+                   </div>
+                 </button>
+               ))}
+            </div>
+          </div>
+
           <div className="bg-white border border-gray-200 p-6 rounded-2xl space-y-6 shadow-sm">
             <div className="space-y-4">
-              <label className="text-[10px] font-bold uppercase tracking-widest text-gray-400">{t.width}</label>
+              <label className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Width</label>
               <input 
                 type="number" 
                 value={dimensions.width || ''}
@@ -126,7 +142,7 @@ export default function Resizer({ onBack, lang }: ResizerProps) {
             </div>
 
             <div className="space-y-4">
-              <label className="text-[10px] font-bold uppercase tracking-widest text-gray-400">{t.height}</label>
+              <label className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Height</label>
               <input 
                 type="number" 
                 value={dimensions.height || ''}
@@ -141,14 +157,14 @@ export default function Resizer({ onBack, lang }: ResizerProps) {
                 disabled={!selectedFile}
                 className="w-full py-3.5 bg-indigo-600 disabled:bg-gray-100 disabled:text-gray-400 text-white rounded-xl font-bold uppercase tracking-widest text-xs transition-all flex items-center justify-center gap-2 hover:bg-indigo-700 shadow-lg shadow-indigo-100"
               >
-                <RefreshCw size={14} /> Refresh
+                <RefreshCw size={14} /> Refresh Preview
               </button>
               {resizedUrl && (
                 <button 
                   onClick={download}
                   className="w-full py-3.5 bg-black text-white rounded-xl font-bold uppercase tracking-widest text-xs transition-all flex items-center justify-center gap-2"
                 >
-                   <Download size={14} /> {t.export}
+                   <Download size={14} /> Export Files
                 </button>
               )}
             </div>
@@ -189,11 +205,11 @@ export default function Resizer({ onBack, lang }: ResizerProps) {
                   <Upload size={32} />
                 </div>
                 <div className="space-y-1">
-                  <h4 className="text-sm font-bold text-gray-900">{t.selectImage}</h4>
+                  <h4 className="text-sm font-bold text-gray-900">Upload Image</h4>
                   <p className="text-xs text-gray-400">Scale your assets to perfection</p>
                 </div>
                 <label className="inline-block cursor-pointer px-6 py-2 bg-white border border-gray-200 rounded-full text-[10px] font-bold uppercase tracking-widest text-gray-900 hover:border-indigo-600 hover:text-indigo-600 transition-all">
-                   {t.selectImage}
+                   Select Local File
                   <input type="file" accept="image/*" onChange={(e) => { const file = e.target.files?.[0]; if(file) loadImage(file); }} className="hidden" />
                 </label>
               </div>
